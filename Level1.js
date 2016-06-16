@@ -30,7 +30,7 @@ var level1 = { "height":15,
         {
          "columns":14,
          "firstgid":1,
-         "image":"Platformer\/Level and Tileset\/tileset.png",
+         "image":"AIE\/Platformer\/Level and Tileset\/tileset.png",
          "imageheight":1024,
          "imagewidth":1024,
          "margin":2,
@@ -44,4 +44,3 @@ var level1 = { "height":15,
  "version":1,
  "width":20
 }
-
