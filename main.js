@@ -18,7 +18,14 @@ function getDeltaTime()
 	return deltaTime;
 }
 
-
+var tx = pixelToTile(player.x),
+var ty = pixelToTile(player.y),
+var nx = player.x%TILE, // true if player overlaps right
+var ny = player.y%TILE, // true if player overlaps below
+var cell = cellAtTileCoord(tx, ty),
+var cellright = cellAtTileCoord(tx + 1, ty),
+var celldown = cellAtTileCoord(tx, ty + 1),
+var celldiag = cellAtTileCoord(tx + 1, ty + 1);
 
 var SCREEN_WIDTH = canvas.width;
 var SCREEN_HEIGHT = canvas.height;
@@ -30,10 +37,8 @@ var fpsTime = 0;
 var chuckNorris = document.createElement("img");
 chuckNorris.src = "hero.png";
 
-var player = new Player();
 var keyboard = new Keyboard();
 
-var LAYER_COUNT = 2;
 var MAP =  {tw: 20, th: 15};
 var TILE = 35;
 var TILESET_TILE = TILE * 2;
@@ -45,7 +50,61 @@ var TILESET_COUNT_Y = 14;
 var tileset = document.createElement("img");
 tileset.src = "tileset.png";
 
+var LAYER_COUNT = 2;
+var LAYER_BACKGOUND = 0;
+var LAYER_PLATFORMS = 1;
+var LAYER_LADDERS = 2;
+
+var METER = TILE;
+var GRAVITY = METER * 9.8 * 6;
+var MAXDX = METER * 10;
+var MAXDY = METER * 15;
+var ACCEL = MAXDX * 2;
+var FRICTION = MAXDX * 6;
+var JUMP = METER * 1500;
+
 var cells = [];
+
+var player = new Player();
+
+function cellAtPixelCoord(layer, x,y)
+{
+    if(x<0 || x>SCREEN_WIDTH || y<0)
+        return 1;
+
+    if(y>SCREEN_HEIGHT)
+        return 0;
+    return cellAtTileCoord(layer, p2t(x), p2t(y));
+};
+
+function cellAtTileCoord(layer,tx,ty)
+{
+    if(tx<0 || tx>=MAP.tw || ty<0)
+        return 1;
+
+    if(ty>=MAP.th)
+        return 0;
+    return cells[layer][ty][tx];
+};
+
+function tileToPixel(tile)
+{
+    return tile * TILE;
+};
+
+function pixelToTile(pixel)
+{
+    return Math.floor(pixel/TILE);
+};
+
+function bound(value, min, max)
+{
+    if(value < min)
+        return min;
+    if(value > max)
+        return max;
+    return value;
+}
 
 function drawMap()
 {
@@ -127,8 +186,11 @@ function initialize()
 	}
 }
 
+initialize();
 
-(function() {
+
+(function () 
+{
   var onEachFrame;
   if (window.requestAnimationFrame) {
     onEachFrame = function(cb) {

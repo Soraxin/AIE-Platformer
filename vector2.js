@@ -29,7 +29,7 @@ var Vector2 = function()
 		this.y += v2.y;
 	};
 	
-	thos.subtract - function(v2)
+	this.subtract - function(v2)
 	{
 		this.x -= v2.x;
 		this.y -= v2.y;
