@@ -45,10 +45,12 @@ Player.prototype.update = function(deltaTime)
         ddx = ddx - ACCEL; 
     else if (wasleft)
     ddx = ddx + FRICTION; 
+
     if (right)
     ddx = ddx + ACCEL; 
     else if (wasright)
         ddx = ddx - FRICTION; 
+	
     if (jump && !this.jumping && !falling)
     {
         ddy = ddy - JUMP; 
@@ -74,6 +76,7 @@ Player.prototype.update = function(deltaTime)
     var cellright = cellAtTileCoord(LAYER_PLATFORMS, tx + 1, ty);
     var celldown = cellAtTileCoord(LAYER_PLATFORMS, tx, ty + 1);
     var celldiag = cellAtTileCoord(LAYER_PLATFORMS, tx + 1, ty + 1);
+	
     if (this.velocity.y > 0) 
     {
         if ((celldown && !cell) || (celldiag && !cellright && nx)) 
